@@ -7,7 +7,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.demo.scmp.R
 import com.demo.scmp.databinding.ActivityLoginBinding
+import com.demo.scmp.services.network.ApiCallBack
+import com.demo.scmp.services.network.ApiManager
+import com.demo.scmp.services.network.ApiUrl
+import com.demo.scmp.services.network.HttpMethod
 import com.demo.scmp.utils.StringUtils
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
@@ -26,9 +33,40 @@ class LoginActivity : AppCompatActivity() {
     private fun setOnClick() {
         binding.btnLogin.setOnClickListener {
             if (checkLoginField()) {
+                val requestBody = FormBody.Builder()
+                    .add("email", binding.edEmail.text.toString())
+                    .add("password", binding.edPassword.text.toString())
+                    .build()
+                ApiManager.call(HttpMethod.POST, ApiUrl.API_LOGIN, requestBody, object : ApiCallBack {
+                    override fun onFail(e: String) {
+                        runOnUiThread{
+                            showMsg(e)
+                            loginFail()
+                        }
 
+                    }
+
+                    override fun onSuccess(responseData: JSONObject) {
+                        runOnUiThread {
+                            if(responseData.has("token")) {
+                                showMsg(responseData.getString("token"))
+                                binding.edEmail.setText("")
+                                binding.edPassword.setText("")
+                            } else {
+                                showMsg("login fail")
+                                loginFail()
+                            }
+                        }
+
+                    }
+                })
             }
         }
+    }
+
+    private fun loginFail() {
+        binding.edEmail.setText("")
+        binding.edPassword.setText("")
     }
 
     private fun checkLoginField(): Boolean {
@@ -49,6 +87,8 @@ class LoginActivity : AppCompatActivity() {
             Handler(Looper.myLooper()!!).postDelayed({
                 showMsg(getString(R.string.please_try_again))
             }, 1000)
+
+            return false
         }
         return true
     }
@@ -61,5 +101,6 @@ class LoginActivity : AppCompatActivity() {
             Toast.LENGTH_SHORT
         ).show()
     }
-    
+
+
 }
