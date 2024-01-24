@@ -29,6 +29,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
+    flavorDimensions "all"
+    productFlavors {
+        dev {
+            buildConfigField 'String', 'API_BASE_URL', '"https://reqres.in/api/"'
+        }
+    }
 }
 
 dependencies {

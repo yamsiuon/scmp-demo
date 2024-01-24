@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SCMP</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="email_format_invalid">email address format invalid!</string>
+    <string name="password_format_invalid">password format invalid!</string>
+    <string name="please_try_again">please try again!</string>
+
 </resources>
