@@ -13,10 +13,10 @@ object ApiManager {
     private const val CONNECT_TIMEOUT: Long = 5L
     private const val READ_TIMEOUT: Long = 15L
 
-    fun call(httpMethod: HttpMethod, apiUrl: ApiUrl, requestBody: RequestBody?, apiCallBack: ApiCallBack) {
+    fun call(httpMethod: HttpMethod, url: String, requestBody: RequestBody?, apiCallBack: ApiCallBack) {
 
         val request = Request.Builder()
-            .url(BuildConfig.API_BASE_URL + apiUrl.endpoint)
+            .url(BuildConfig.API_BASE_URL + url)
             .method(httpMethod.method, requestBody)
             .build()
 

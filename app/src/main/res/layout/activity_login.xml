@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="8dp"
-                android:text="eve.holt@reqres.in"
+                android:text=""
                 tools:text=""/>
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:layout_marginTop="8dp"
-                android:text="cityslicka"
+                android:text=""
                 tools:text=""/>
 
             <View

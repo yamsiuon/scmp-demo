@@ -6,5 +6,12 @@
     <string name="email_format_invalid">email address format invalid!</string>
     <string name="password_format_invalid">password format invalid!</string>
     <string name="please_try_again">please try again!</string>
+    <string name="token">Token:</string>
+    <string name="loading">Loading</string>
+    <string name="staff_list">Staff List</string>
+
+    <string name="avatar">Avatar</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
 
 </resources>

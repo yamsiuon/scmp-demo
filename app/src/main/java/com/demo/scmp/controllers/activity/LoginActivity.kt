@@ -1,11 +1,10 @@
 package com.demo.scmp.controllers.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.demo.scmp.R
 import com.demo.scmp.databinding.ActivityLoginBinding
 import com.demo.scmp.services.network.ApiCallBack
@@ -13,11 +12,11 @@ import com.demo.scmp.services.network.ApiManager
 import com.demo.scmp.services.network.ApiUrl
 import com.demo.scmp.services.network.HttpMethod
 import com.demo.scmp.utils.StringUtils
-import okhttp3.*
+import okhttp3.FormBody
 import org.json.JSONObject
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -32,41 +31,51 @@ class LoginActivity : AppCompatActivity() {
     private fun setOnClick() {
         binding.btnLogin.setOnClickListener {
             if (checkLoginField()) {
-                binding.layoutLoading.lltLoading.visibility = View.VISIBLE
-                val requestBody = FormBody.Builder()
-                    .add("email", binding.edEmail.text.toString())
-                    .add("password", binding.edPassword.text.toString())
-                    .build()
-                ApiManager.call(HttpMethod.POST, ApiUrl.API_LOGIN, requestBody, object : ApiCallBack {
-                    override fun onFail(e: String) {
-                        runOnUiThread{
-                            binding.layoutLoading.lltLoading.visibility = View.GONE
-                            showMsg(e)
-                            loginFail()
-                        }
-
-                    }
-
-                    override fun onSuccess(responseData: JSONObject) {
-                        runOnUiThread {
-                            binding.layoutLoading.lltLoading.visibility = View.GONE
-                            if(responseData.has("token")) {
-                                showMsg(responseData.getString("token"))
-                                binding.edEmail.setText("")
-                                binding.edPassword.setText("")
-                            } else {
-                                showMsg("login fail")
-                                loginFail()
-                            }
-                        }
-
-                    }
-                })
+                callApiLogin()
             }
         }
     }
 
-    private fun loginFail() {
+    private fun callApiLogin() {
+        binding.layoutLoading.lltLoading.visibility = View.VISIBLE
+        val requestBody = FormBody.Builder()
+            .add("email", binding.edEmail.text.toString())
+            .add("password", binding.edPassword.text.toString())
+            .build()
+        ApiManager.call(
+            HttpMethod.POST,
+            ApiUrl.API_LOGIN.endpoint,
+            requestBody,
+            object : ApiCallBack {
+                override fun onFail(e: String) {
+                    runOnUiThread {
+                        binding.layoutLoading.lltLoading.visibility = View.GONE
+                        showMsg(e)
+                        clearData()
+                    }
+
+                }
+
+                override fun onSuccess(responseData: JSONObject) {
+                    runOnUiThread {
+                        binding.layoutLoading.lltLoading.visibility = View.GONE
+                        if (responseData.has("token")) {
+                            clearData()
+                            val i =
+                                Intent(this@LoginActivity, StaffListActivity::class.java)
+                            i.putExtra("token", responseData.getString("token"))
+                            startActivity(i)
+                        } else {
+                            showMsg("login fail")
+                            clearData()
+                        }
+                    }
+
+                }
+            })
+    }
+
+    private fun clearData() {
         binding.edEmail.setText("")
         binding.edPassword.setText("")
     }
@@ -94,15 +103,5 @@ class LoginActivity : AppCompatActivity() {
         }
         return true
     }
-
-    private fun showMsg(
-        msg: String
-    ) {
-        Toast.makeText(
-            this, msg,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
 
 }
