@@ -65,6 +65,14 @@ class LoginActivity : BaseActivity() {
 
                 }
 
+                override fun onError(e: String) {
+                    runOnUiThread {
+                        binding.layoutLoading.lltLoading.visibility = View.GONE
+                        showMsg("login fail")
+                        clearData()
+                    }
+                }
+
                 override fun onSuccess(responseData: JSONObject) {
                     runOnUiThread {
                         binding.layoutLoading.lltLoading.visibility = View.GONE

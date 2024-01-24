@@ -76,6 +76,14 @@ class StaffListActivity : BaseActivity() {
 
                 }
 
+                override fun onError(e: String) {
+                    runOnUiThread {
+                        binding.rv.visibility = View.VISIBLE
+                        binding.fltLoading.visibility = View.GONE
+                        showMsg(e)
+                    }
+                }
+
                 override fun onSuccess(responseData: JSONObject) {
                     runOnUiThread {
                         binding.rv.visibility = View.VISIBLE

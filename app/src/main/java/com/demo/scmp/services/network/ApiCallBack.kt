@@ -4,5 +4,6 @@ import org.json.JSONObject
 
 interface ApiCallBack {
     fun onFail(e: String)
+    fun onError(e: String)
     fun onSuccess(responseData: JSONObject)
 }

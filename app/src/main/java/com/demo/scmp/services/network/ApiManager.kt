@@ -42,7 +42,7 @@ object ApiManager {
                    }
                    apiCallBack.onSuccess(res)
                } else {
-                   apiCallBack.onFail("Error Happen, please contact cs.")
+                   apiCallBack.onError("Error Happen, please contact cs.")
                }
            }
        })
