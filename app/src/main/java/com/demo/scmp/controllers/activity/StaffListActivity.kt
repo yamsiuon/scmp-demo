@@ -1,8 +1,10 @@
 package com.demo.scmp.controllers.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.scmp.databinding.ActivityStaffListBinding
+import com.demo.scmp.interfaces.OnItemClickListener
 import com.demo.scmp.recyclerview.StaffRecyclerViewAdapter
 import com.demo.scmp.services.network.ApiCallBack
 import com.demo.scmp.services.network.ApiManager
@@ -15,9 +17,9 @@ class StaffListActivity : BaseActivity() {
     private lateinit var binding: ActivityStaffListBinding
 
     private var page: Int = 1
-    private var totalPage: Int = 0
+    private var totalPages: Int = 0
 
-    private var adapter: StaffRecyclerViewAdapter = StaffRecyclerViewAdapter()
+    private var adapter: StaffRecyclerViewAdapter = StaffRecyclerViewAdapter(getListener())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,16 @@ class StaffListActivity : BaseActivity() {
         binding.rv.adapter = adapter
     }
 
+    private fun getListener(): OnItemClickListener = object : OnItemClickListener {
+        override fun onClickItem(data: JSONObject?, pos: Int) {
+            data?.let {
+                if(data.has("type") && data.getString("type") == "loading") {
+                    callApiGetUserData()
+                }
+            }
+        }
+    }
+
     private fun callApiGetUserData() {
         ApiManager.call(
             HttpMethod.GET,
@@ -50,6 +62,8 @@ class StaffListActivity : BaseActivity() {
             object : ApiCallBack {
                 override fun onFail(e: String) {
                     runOnUiThread {
+                        binding.rv.visibility = View.VISIBLE
+                        binding.fltLoading.visibility = View.GONE
                         showMsg(e)
                     }
 
@@ -57,16 +71,19 @@ class StaffListActivity : BaseActivity() {
 
                 override fun onSuccess(responseData: JSONObject) {
                     runOnUiThread {
+                        binding.rv.visibility = View.VISIBLE
+                        binding.fltLoading.visibility = View.GONE
+                        val list: ArrayList<JSONObject> = ArrayList()
                         if (responseData.has("data")) {
                             val data = responseData.getJSONArray("data")
-                            if (data.length() > 0 && page == 1) {
-                                val list: ArrayList<JSONObject> = ArrayList()
-                                for (i in 0 until data.length()) {
-                                    if (data.get(i) is JSONObject) {
-                                        list.add(data.getJSONObject(i))
-                                    }
+                            for (i in 0 until data.length()) {
+                                if (data.get(i) is JSONObject) {
+                                    val jo = data.getJSONObject(i)
+                                    jo.put("type", "data")
+                                    list.add(jo)
                                 }
-                                adapter.addAll(list)
+                            }
+                            if (data.length() > 0 && page == 1) {
                                 data.getJSONObject(0)?.let {
                                     binding.componentStaffInfo.getTvEmail().text =
                                         it.has("email").let { it1 ->
@@ -103,12 +120,16 @@ class StaffListActivity : BaseActivity() {
                                 }
                             }
                         }
-                        if (responseData.has("page")) {
+                        if (responseData.has("page") && responseData.has("total_pages")) {
+                            totalPages = responseData.getInt("total_pages")
                             page = responseData.getInt("page") + 1
+                            if (page <= totalPages) {
+                                val loadingJO = JSONObject()
+                                loadingJO.put("type", "loading")
+                                list.add(loadingJO)
+                            }
                         }
-                        if (responseData.has("total_page")) {
-                            totalPage = responseData.getInt("total_page")
-                        }
+                        adapter.addAll(list)
                     }
 
                 }

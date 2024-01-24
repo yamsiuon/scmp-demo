@@ -39,8 +39,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginVertical="8dp">
+            android:layout_marginVertical="8dp"
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/tvBase"
@@ -71,11 +71,25 @@
             android:layout_marginVertical="16dp"
             android:background="#FF03DAC5" />
 
+        <FrameLayout
+            android:id="@+id/flt_loading"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:visibility="gone" />
 
     </LinearLayout>
 
