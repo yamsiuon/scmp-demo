@@ -12,6 +12,7 @@ object StringUtils {
 
     @JvmStatic
     fun isValidPassword(txt: String): Boolean {
-        return Pattern.compile("^(?=.*[a-zA-Z]).{6,10}+$").matcher(txt).matches()
+        return Pattern.compile("^(?=.*[a-zA-Z0-9]).{6,10}+$").matcher(txt).matches()
+
     }
 }

@@ -42,7 +42,7 @@ object ApiManager {
                    }
                    apiCallBack.onSuccess(res)
                } else {
-                   apiCallBack.onFail("Call fail")
+                   apiCallBack.onFail("Fail")
                }
            }
        })

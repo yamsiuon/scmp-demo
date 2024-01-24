@@ -33,7 +33,14 @@ class StaffListActivity : BaseActivity() {
         }
 
         setupRv()
+        setOnClick()
         callApiGetUserData()
+    }
+
+    private fun setOnClick() {
+        binding.tvLogout.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupRv() {
