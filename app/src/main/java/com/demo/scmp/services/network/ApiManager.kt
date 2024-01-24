@@ -27,7 +27,7 @@ object ApiManager {
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
         builder.build().newCall(request).enqueue(object : Callback {
            override fun onFailure(call: Call, e: IOException) {
-               apiCallBack.onFail(e.message ?: "error")
+               apiCallBack.onFail(e.message ?: "Error Happen, please contact cs.")
            }
 
            override fun onResponse(call: Call, response: Response) {
@@ -42,7 +42,7 @@ object ApiManager {
                    }
                    apiCallBack.onSuccess(res)
                } else {
-                   apiCallBack.onFail("Fail")
+                   apiCallBack.onFail("Error Happen, please contact cs.")
                }
            }
        })
