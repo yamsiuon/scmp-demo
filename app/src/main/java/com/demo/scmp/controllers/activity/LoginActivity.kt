@@ -76,7 +76,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun clearData() {
-        binding.edEmail.setText("")
+//        binding.edEmail.setText("")
         binding.edPassword.setText("")
     }
 
