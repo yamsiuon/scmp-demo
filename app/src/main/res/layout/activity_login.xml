@@ -5,7 +5,7 @@
     style="@style/baseView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controllers.LoginActivity">
+    tools:context=".controllers.activity.LoginActivity">
 
     <ScrollView
         style="@style/baseViewContent"
@@ -82,5 +82,9 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading" />
 
 </FrameLayout>

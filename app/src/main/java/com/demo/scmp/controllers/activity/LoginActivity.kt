@@ -1,8 +1,9 @@
-package com.demo.scmp.controllers
+package com.demo.scmp.controllers.activity
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.demo.scmp.R
@@ -14,8 +15,6 @@ import com.demo.scmp.services.network.HttpMethod
 import com.demo.scmp.utils.StringUtils
 import okhttp3.*
 import org.json.JSONObject
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 
 class LoginActivity : AppCompatActivity() {
@@ -33,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setOnClick() {
         binding.btnLogin.setOnClickListener {
             if (checkLoginField()) {
+                binding.layoutLoading.lltLoading.visibility = View.VISIBLE
                 val requestBody = FormBody.Builder()
                     .add("email", binding.edEmail.text.toString())
                     .add("password", binding.edPassword.text.toString())
@@ -40,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
                 ApiManager.call(HttpMethod.POST, ApiUrl.API_LOGIN, requestBody, object : ApiCallBack {
                     override fun onFail(e: String) {
                         runOnUiThread{
+                            binding.layoutLoading.lltLoading.visibility = View.GONE
                             showMsg(e)
                             loginFail()
                         }
@@ -48,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onSuccess(responseData: JSONObject) {
                         runOnUiThread {
+                            binding.layoutLoading.lltLoading.visibility = View.GONE
                             if(responseData.has("token")) {
                                 showMsg(responseData.getString("token"))
                                 binding.edEmail.setText("")
