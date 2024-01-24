@@ -28,7 +28,7 @@
                 android:layout_marginTop="80dp" />
 
             <TextView
-                style="@style/edTitle"
+                style="@style/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
@@ -46,7 +46,7 @@
                 tools:text=""/>
 
             <TextView
-                style="@style/edTitle"
+                style="@style/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/password"
