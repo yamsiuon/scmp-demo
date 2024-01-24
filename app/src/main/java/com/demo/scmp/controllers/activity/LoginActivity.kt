@@ -4,7 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView.OnEditorActionListener
 import com.demo.scmp.R
 import com.demo.scmp.databinding.ActivityLoginBinding
 import com.demo.scmp.services.network.ApiCallBack
@@ -34,6 +37,12 @@ class LoginActivity : BaseActivity() {
                 callApiLogin()
             }
         }
+        binding.edPassword.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+            if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.btnLogin.performClick()
+            }
+            false
+        })
     }
 
     private fun callApiLogin() {
